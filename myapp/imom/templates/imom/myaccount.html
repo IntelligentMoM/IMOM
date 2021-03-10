@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/myaccount.css' %}">
+    <title>IMOM</title>
+</head>
+<body>
+     <nav>
+        <ul class="navout">
+            <li class="list"><a href="{% url 'upload_audio' %}" class="link">Home</a></li>
+            <li class="list"><a href="{% url 'history' %}" class="link">History</a></li>
+            <li class="list"><a href="{% url 'myaccount' %}" class="link">Account</a></li>
+            <li class="list"><a href="{% url 'logout' %}" class="link">Logout</a></li>
+        </ul>
+    </nav>
+    <div class="outaccount">
+        <form class="formaccount" method="post">
+            <div class="inaccount">
+                <label class="labelaccount" for="fname">First Name</label>
+                <input value="" class="inputaccount" type="text" id="fname" name="firstname" required/>
+            </div>
+            <div class="inaccount">
+                <label class="labelaccount" for="sname">Surname</label>
+                <input value="" class="inputaccount" type="text" id="sname" name="surname" required/>
+            </div>
+            <div class="inaccount">
+                <label class="labelaccount" for="cnum">Contact Number</label>
+                <input value="" class="inputaccount" type="text" id="cnum" name="contactnumber" maxLength="10" required/>
+            </div>
+            <div class="inaccount">
+                <label class="labelaccount" for="add">Address</label>
+                <input value="" class="inputaccount" type="text" id="add" name="address" required/>
+            </div>            
+            <button class="btn">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

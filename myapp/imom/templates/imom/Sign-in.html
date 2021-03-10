@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns: xmlns: xmlns: xmlns: xmlns:>
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static "css/signin.css" %}">
+    <title>IMOM</title>
+</head>
+<body onload="showalert({{alertvar}})">
+   <header>
+        <div class="first">
+            <p style="margin-left:7%;color:white;font-size:310%;width:50%">
+                INTELLIGENT MINUTES OF MEETING
+            </p>
+            <div class="form">
+                <p style="text-align:center;margin:35px 0px;font-size:170%" id="1stp">
+                    SIGN IN
+                </p>
+                <form method="post">
+                    <input class="input" type="email" id="email" name="email" placeholder="E-mail" required>
+                    <input class="input" type="password" id="password" name="password" placeholder="Password" required>
+                    <input class="submit" type="submit" value="Submit" id="1stbtn" name="signin">
+                     {% csrf_token %}
+                </form>
+                <p style="margin-top:25px;font-size:123%" id="2ndp">Don't have an account?</p>
+                <button class="secondbtn" onclick="func()" id="2ndbtn">SIGN UP</button>
+             </div>
+        </div>
+   </header>
+    <div>
+
+    </div>
+</body>
+<script>
+    function func(){
+        var a=document.getElementById("2ndbtn");
+        var b=document.getElementById("1stp");
+        var c=document.getElementById("2ndp");
+        var d=document.getElementById("1stbtn");
+        b.innerHTML=a.innerHTML;
+        if(a.innerHTML=="SIGN IN"){
+            a.innerHTML="SIGN UP";
+            c.innerHTML="Don't have an account?";
+            d.setAttribute("name","signin")
+        }
+        else{
+            a.innerHTML="SIGN IN";
+            c.innerHTML="Already have an account?";
+            d.setAttribute("name","signup")
+        }
+    }
+
+    function showalert(value){
+        if(value==1){
+            alert("Already registered! Please Sign-in.")
+        }
+        else if(value==2){
+            alert("Invalid Credentials")
+        }
+    }
+
+</script>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static "css/nav.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/upload_audio.css" %}">
+    <title>IMOM</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+</head>
+<body onload="hide({{localvar}})">
+    <nav>
+        <ul class="navout">
+            <li class="list"><a href="{% url 'upload_audio' %}" class="link">Home</a></li>
+            <li class="list"><a href="{% url 'history' %}" class="link">History</a></li>
+            <li class="list"><a href="{% url 'myaccount' %}" class="link">Account</a></li>
+            <li class="list"><a href="{% url 'logout' %}" class="link">Logout</a></li>
+        </ul>
+    </nav>
+    <form method="post" enctype="multipart/form-data" class="form" onsubmit="hide({{localvar}})">
+        <input class="input" type="file" name="audiofile" id="audiofile" accept=".wav" required>
+<!--        <input type="submit" onclick="checkformat()">-->
+        <button type="submit" class="submit" name="uploadbtn">Submit</button>
+        <div style="margin-top:10px;font-size:108%">
+            <div id="valid" style="color:green">
+                Uploaded
+            </div>
+            <div id="warning" style="color:yellow">
+                Audio file is already uploaded
+            </div>
+        </div>
+        <div style="margin-top:80px;display: flex;flex-wrap: nowrap;">
+            <button type="submit" class="submit" name="generatebtn">Generate Transcript</button>
+            <button type="submit" class="submit" name="summarybtn">Generate Summary</button>
+        </div>
+        {% csrf_token %}
+    </form>
+    <div>
+        <audio controls>
+            <source src="{{MEDIA_URL}}{{audiopath}}" type="audio/wav">
+        </audio>
+    </div>
+</body>
+<script language="JavaScript" type="text/javascript">
+    function hide(value){
+        console.log("HIDE")
+        if(value==0){
+            $("#valid").hide();
+            $("#warning").hide();
+        }
+        else if(value==1){
+            $("#warning").hide();
+            $("#valid").show();
+        }
+        else{
+            $("#warning").show();
+            $("#valid").hide();
+        }
+    }
+</script>
+</html>

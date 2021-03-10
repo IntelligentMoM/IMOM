@@ -1,0 +1,23 @@
+td {
+  text-align: center;
+  font-size:105%;
+  padding: 13px;
+  border-bottom: 1px solid #ccc;
+}
+
+.submit {
+  width: 85%;
+  padding: 14px;
+  margin: 0px auto;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: #16a085;
+  color: white;
+  border: 1px solid white;
+  font-size: 105%;
+  cursor: pointer;
+}
+.submit:hover {
+  background-color: #0d8f75;
+}
+

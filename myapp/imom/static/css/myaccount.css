@@ -1,0 +1,53 @@
+
+.formaccount {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10px;
+}
+.inaccount {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  margin: 7px;
+}
+.outaccount {
+  width: 50%;
+  padding: 30px;
+  margin: 70px auto;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: white;
+  border-radius: 10px;
+}
+.labelaccount {
+  width: 80%;
+  font-size: 119%;
+  margin: 5px;
+  text-align: left;
+}
+.inputaccount {
+  width: 80%;
+  padding: 8px;
+  font-size:95%;
+}
+.btn{
+  width: 50%;
+  padding: 13px 0px;
+  outline: none;
+  color: #16a085;
+  background-color: white;
+  border: 1px solid #16a085;
+  margin-top: 20px;
+  font-size: 90%;
+  cursor: pointer;
+}
+
+.btn:hover {
+  color: white;
+  background-color: #0d8f75;
+  border: 1px solid #0d8f75;
+}

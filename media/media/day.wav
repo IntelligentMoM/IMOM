@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+#define ll long long
+using namespace std;
+
+ll dayfinder(ll d,ll m,ll y){
+  vector<ll> t{0,3,2,5,0,3,5,1,4,6,2,4};
+    y-=m<3;  
+    cout<<y<<" "<<(y/4)<<" "<<(y/100)<<" "<<(y/400)<<" "<<t[m-1]<<" "<<d<<"\n";
+    return ((y)+(y/4)-(y/100)+(y/400)+t[m-1]+d)%7;  
+}
+
+int main(){
+	// cout<<dayfinder(15,9,2020);
+	int count=0;
+	int y=2001;
+	int d=dayfinder(13,1,y);
+	// while(y<=2098)
+	// {
+	// 	for(int i=1;i<=12;i++)
+	// 	{
+	// 		int d=dayfinder(13,i,y);
+	// 		if(d==5)
+	// 			count++;
+	// 	}
+	// 	y++;
+	// }
+	// cout<<count<<"\n";
+	return 0;
+}

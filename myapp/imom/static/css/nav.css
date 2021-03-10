@@ -1,0 +1,29 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+.navout {
+  display: flex;
+  justify-content: flex-end;
+  list-style: none;
+  border-bottom:1px solid #eee;
+}
+
+.list {
+  padding:20px;
+  cursor:pointer;
+}
+
+.link {
+  text-decoration: none;
+  font-size:143%;
+  color: black;
+  margin-right:30px;
+  padding: 10px;
+  border: 1px solid transparent;
+}
+
+.link:hover {
+  border-bottom: 2px solid #16a085;
+}
