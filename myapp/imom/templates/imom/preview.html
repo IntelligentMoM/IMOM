@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static "css/nav.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "css/preview.css" %}">
+    <title>IMOM</title>
+</head>
+<body>
+ <nav>
+        <ul class="navout">
+            <li class="list"><a href="{% url 'upload_audio' %}" class="link">Home</a></li>
+            <li class="list"><a href="{% url 'history' %}" class="link">History</a></li>
+            <li class="list"><a href="{% url 'myaccount' %}" class="link">Account</a></li>
+            <li class="list"><a href="{% url 'logout' %}" class="link">Logout</a></li>
+        </ul>
+    </nav>
+    <div style="display: flex;flex-wrap: nowrap;" class="firstdiv">
+        <div style="width:50%;text-align:center;font-size:125%">Transcript Preview</div>
+        <div style="width:50%;text-align:center;font-size:125%">Summary Preview</div>
+    </div>
+    <div style="display: flex;flex-wrap: nowrap;" class="firstdiv">
+        <textarea disabled>{{text_transcript}}</textarea>
+        <textarea disabled>{{text_summary}}</textarea>
+    </div>
+    <div style="display: flex;flex-wrap: nowrap;" class="firstdiv">
+             <a href="{% url 'preview' id=identifier id1=2%}" style="width:100%;text-align:center;">
+                <button class="submit">Download Transcript</button>
+             </a>
+            {% if text_summary %}
+                <a href="{% url 'preview' id=identifier id1=4%}" style="width:100%;text-align:center;">
+                        <button class="submit">Download Summary</button>
+                </a>
+            {% else %}
+                <a href="{% url 'preview' id=identifier id1=3%}" style="width:100%;text-align:center;">
+                    <button class="submit">Generate Summary</button>
+                </a>
+            {% endif %}
+    </div>
+</body>
+</html>

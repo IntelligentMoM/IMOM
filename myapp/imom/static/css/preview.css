@@ -1,0 +1,26 @@
+.firstdiv{
+    margin:30px 60px;
+}
+
+textarea{
+    width:50%;
+    margin:10px;
+    height:500px;
+    padding:20px 30px;
+}
+
+.submit {
+  width: 45%;
+  padding: 14px;
+  margin: 0px auto;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: #16a085;
+  color: white;
+  border: 1px solid white;
+  font-size: 105%;
+  cursor: pointer;
+}
+.submit:hover {
+  background-color: #0d8f75;
+}

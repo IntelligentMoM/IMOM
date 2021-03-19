@@ -18,47 +18,77 @@
     </nav>
     <div style="padding: 60px 80px;">
             <table style="width:100%">
-                <tr>
-                    <td style="width: 40%;"><p style="font-size:115%">utyghjkfnvmbld</p></td>
-                    <td style="width: 30%;"><button class="submit">Download Transcript</button></td>
-                    <td style="width: 30%;"><button class="submit">Generate Text Summary</button></td>
-                </tr>
-                <tr>
-                    <td style="width: 40%;background-color:#eee"><p style="font-size:115%">asdfzxvcghbnjm</p></td>
-                    <td style="width: 30%;"><button class="submit">Download Transcript</button></td>
-                    <td style="width: 30%;"><button class="submit">Download Text Summary</button></td>
-                </tr>
-                <tr>
-                    <td style="width: 40%;"><p style="font-size:115%">dsadnasjbdaskd</p></td>
-                    <td style="width: 30%;"><button class="submit">Generate Transcript</button></td>
-                    <td style="width: 30%;"><button class="submit">Generate Text Summary</button></td>
-                </tr>
-                <tr>
-                    <td style="width: 40%;background-color:#eee"><p style="font-size:115%">zxcfghuiolkjhn</p></td>
-                    <td style="width: 30%;"><button class="submit">Generate Transcript</button></td>
-                    <td style="width: 30%;"><button class="submit">Generate Text Summary</button></td>
-                </tr>
-                   <tr>
-                    <td style="width: 40%;"><p style="font-size:115%">mnjkluiopyhgvb</p></td>
-                    <td style="width: 30%;"><button class="submit">Download Transcript</button></td>
-                    <td style="width: 30%;"><button class="submit">Download Text Summary</button></td>
-                </tr>
-                   <tr>
-                    <td style="width: 40%;background-color:#eee"><p style="font-size:115%">qwertyuioplkjh</p></td>
-                    <td style="width: 30%;"><button class="submit">Generate Transcript</button></td>
-                    <td style="width: 30%;"><button class="submit">Download Text Summary</button></td>
-                </tr>
-                   <tr>
-                    <td style="width: 40%;"><p style="font-size:115%">htyuoiorghbnjh</p></td>
-                    <td style="width: 30%;"><button class="submit">Download Transcript</button></td>
-                    <td style="width: 30%;"><button class="submit">Generate Text Summary</button></td>
-                </tr>
-                   <tr>
-                    <td style="width: 40%;background-color:#eee"><p style="font-size:115%">lkjhnmyuiewghj</p></td>
-                    <td style="width: 30%;"><button class="submit">Generate Transcript</button></td>
-                    <td style="width: 30%;"><button class="submit">Generate Text Summary</button></td>
-                </tr>
-
+                {% for obj in Audiofiles_obj %}
+                    {% if  not forloop.counter|divisibleby:2 %}
+                        <tr>
+                            <td style="width: 20%;"><p style="font-size:115%">{{obj.audio_name}}</p></td>
+                            <td style="width: 35%;"><audio controls>
+                                     <source src="{{MEDIA_URL}}media/{{obj.audio_name}}" type="audio/wav">
+                                 </audio>
+                            </td>
+                            {% if obj.number == 1 %}
+                                <td style="width: 23%;">
+                                    <a href="{% url 'preview' id=forloop.counter id1=1%}">
+                                        <button class="submit" name="generate_t">Generate Transcript</button>
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td style="width: 22%;">
+                                    <a href="{% url 'preview' id=forloop.counter id1=2%}">
+                                        <button class="submit">Download Transcript</button>
+                                    </a>
+                                </td>
+                                {% if obj.number == 2 %}
+                                    <td style="width: 22%;">
+                                        <a href="{% url 'preview' id=forloop.counter id1=3%}">
+                                            <button class="submit" name="generate_s">Generate Summary</button>
+                                        </a>
+                                    </td>
+                                {% else %}
+                                    <td style="width: 22%;">
+                                        <a href="{% url 'preview' id=forloop.counter id1=4%}">
+                                            <button class="submit">Download Summary</button>
+                                        </a>
+                                    </td>
+                                {% endif %}
+                            {% endif %}
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td style="width: 20%;background-color:#eee"><p style="font-size:115%">{{obj.audio_name}}</p></td>
+                            <td style="width: 35%;"><audio controls>
+                                     <source src="{{MEDIA_URL}}media/{{obj.audio_name}}" type="audio/wav">
+                                 </audio>
+                            </td>
+                            {% if obj.number == 1 %}
+                                <td style="width: 23%;">
+                                    <a href="{% url 'preview' id=forloop.counter id1=1%}">
+                                        <button class="submit">Generate Transcript</button>
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td style="width: 22%;">
+                                    <a href="{% url 'preview' id=forloop.counter id1=2%}">
+                                        <button class="submit">Download Transcript</button>
+                                    </a>
+                                </td>
+                                {% if obj.number == 2%}
+                                    <td style="width: 22%;">
+                                        <a href="{% url 'preview' id=forloop.counter id1=3%}">
+                                            <button class="submit">Generate Summary</button>
+                                        </a>
+                                    </td>
+                                {% else %}
+                                    <td style="width: 22%;">
+                                        <a href="{% url 'preview' id=forloop.counter id1=4%}">
+                                            <button class="submit">Download Summary</button>
+                                        </a>
+                                    </td>
+                                {% endif %}
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
             </table>
         </div>
 </body>

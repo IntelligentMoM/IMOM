@@ -17,7 +17,7 @@
             <li class="list"><a href="{% url 'logout' %}" class="link">Logout</a></li>
         </ul>
     </nav>
-    <form method="post" enctype="multipart/form-data" class="form" onsubmit="hide({{localvar}})">
+    <form method="post" enctype="multipart/form-data" class="form" onsubmit="hide({{localvar}})" style="margin-top:100px;">
         <input class="input" type="file" name="audiofile" id="audiofile" accept=".wav" required>
 <!--        <input type="submit" onclick="checkformat()">-->
         <button type="submit" class="submit" name="uploadbtn">Submit</button>
@@ -26,20 +26,19 @@
                 Uploaded
             </div>
             <div id="warning" style="color:yellow">
-                Audio file is already uploaded
+                Audio file is already uploaded, You can proceed to History Tab
             </div>
         </div>
-        <div style="margin-top:80px;display: flex;flex-wrap: nowrap;">
-            <button type="submit" class="submit" name="generatebtn">Generate Transcript</button>
-            <button type="submit" class="submit" name="summarybtn">Generate Summary</button>
+        <div>
+            <audio controls>
+                <source src="{{MEDIA_URL}}{{audiopath}}" type="audio/wav">
+            </audio>
         </div>
         {% csrf_token %}
     </form>
-    <div>
-        <audio controls>
-            <source src="{{MEDIA_URL}}{{audiopath}}" type="audio/wav">
-        </audio>
-    </div>
+    <a href="{% url 'preview' %}" style="width:23%;margin:0px auto">
+        <button type="submit" class="submit" id="generate_t" style="cursor:not-allowed;background-color:grey;width:25%" name="generate_t" disabled>Generate Transcript</button>
+    </a>
 </body>
 <script language="JavaScript" type="text/javascript">
     function hide(value){
@@ -51,8 +50,11 @@
         else if(value==1){
             $("#warning").hide();
             $("#valid").show();
+            document.getElementById("generate_t").style.backgroundColor = "#16a085";
+            document.getElementById("generate_t").disabled = false;
+            document.getElementById("generate_t").style.cursor = "pointer";
         }
-        else{
+        else if(value==2){
             $("#warning").show();
             $("#valid").hide();
         }

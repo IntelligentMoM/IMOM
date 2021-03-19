@@ -18,6 +18,10 @@
     </nav>
     <div class="outaccount">
         <form class="formaccount" method="post">
+             <div class="inaccount">
+                <label class="labelaccount" for="user">Username</label>
+                <input value="{{user_name}}" class="inputaccount" type="text" id="user" name="address" disabled/>
+            </div>
             <div class="inaccount">
                 <label class="labelaccount" for="fname">First Name</label>
                 <input value="" class="inputaccount" type="text" id="fname" name="firstname" required/>
@@ -30,10 +34,6 @@
                 <label class="labelaccount" for="cnum">Contact Number</label>
                 <input value="" class="inputaccount" type="text" id="cnum" name="contactnumber" maxLength="10" required/>
             </div>
-            <div class="inaccount">
-                <label class="labelaccount" for="add">Address</label>
-                <input value="" class="inputaccount" type="text" id="add" name="address" required/>
-            </div>            
             <button class="btn">Submit</button>
         </form>
     </div>

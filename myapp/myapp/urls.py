@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^$', views.sign, name="sign"),
     url(r'^upload_audio/', views.upload_audio, name="upload_audio"),
     url(r'^history/', views.history, name="history"),
+    url(r'^preview/$', views.preview, name="preview"),
+    url(r'^preview/(?P<id>\d+)/(?P<id1>\d+)/$', views.preview, name="preview"),
     url(r'^myaccount/', views.myaccount, name="myaccount"),
     url(r'^logout/', views.logout, name="logout"),
 
