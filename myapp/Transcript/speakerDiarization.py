@@ -30,7 +30,7 @@ global args
 args = parser.parse_args()
 
 
-SAVED_MODEL_NAME = '/content/drive/MyDrive/speaker test/pretrained/model_1803_epoch_300.uisrnn_benchmark'
+SAVED_MODEL_NAME = 'pretrained/model'
 
 def append2dict(speakerSlice, spk_period):
     key = list(spk_period.keys())[0]
