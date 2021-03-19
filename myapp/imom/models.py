@@ -7,6 +7,12 @@ class Userinfo(models.Model):
     def __str__(self):
         return self.user.username
 
+class User_All_Details(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=500)
+    second_name = models.CharField(max_length=500)
+    contact = models.CharField(max_length=10)
+
 class Audiofiles(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     audio_name = models.CharField(max_length=500)
