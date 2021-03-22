@@ -16,15 +16,18 @@
             <li class="list"><a href="{% url 'logout' %}" class="link">Logout</a></li>
         </ul>
     </nav>
-    <div style="display: flex;flex-wrap: nowrap;" class="firstdiv">
+    <div style="width:100%;text-align:center;font-size:130%;padding:30px 0px">
+        {{audio_name}}
+    </div>
+    <div style="display: flex;flex-wrap: nowrap;margin:5px 60px;">
         <div style="width:50%;text-align:center;font-size:125%">Transcript Preview</div>
         <div style="width:50%;text-align:center;font-size:125%">Summary Preview</div>
     </div>
-    <div style="display: flex;flex-wrap: nowrap;" class="firstdiv">
+    <div style="display: flex;flex-wrap: nowrap;margin:5px 60px;">
         <textarea disabled>{{text_transcript}}</textarea>
         <textarea disabled>{{text_summary}}</textarea>
     </div>
-    <div style="display: flex;flex-wrap: nowrap;" class="firstdiv">
+    <div style="display: flex;flex-wrap: nowrap;margin:5px 60px;">
              <a href="{% url 'preview' id=identifier id1=2%}" style="width:100%;text-align:center;">
                 <button class="submit">Download Transcript</button>
              </a>

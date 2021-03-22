@@ -17,28 +17,32 @@
             <li class="list"><a href="{% url 'logout' %}" class="link">Logout</a></li>
         </ul>
     </nav>
-    <form method="post" enctype="multipart/form-data" class="form" onsubmit="hide({{localvar}})" style="margin-top:100px;">
-        <input class="input" type="file" name="audiofile" id="audiofile" accept=".wav" required>
+    <div style="display:flex;flex-wrap:nowrap; padding:30px;margin:0px 30px;margin-top:7%;text-align:center">
+        <form method="post" enctype="multipart/form-data" class="form" onsubmit="hide({{localvar}})">
+            <input class="input" type="file" name="audiofile" id="audiofile" accept=".wav" required>
 <!--        <input type="submit" onclick="checkformat()">-->
-        <button type="submit" class="submit" name="uploadbtn">Submit</button>
-        <div style="margin-top:10px;font-size:108%">
-            <div id="valid" style="color:green">
-                Uploaded
+            <button type="submit" class="submit" name="uploadbtn">Submit</button>
+            <div style="margin-top:10px;font-size:108%">
+                <div id="valid" style="color:green">
+                    Uploaded
+                </div>
+                <div id="warning" style="color:yellow">
+                    Audio file is already uploaded, You can proceed to History Tab
+                </div>
             </div>
-            <div id="warning" style="color:yellow">
-                Audio file is already uploaded, You can proceed to History Tab
-            </div>
-        </div>
-        <div>
+            {% csrf_token %}
+        </form>
+        <div style="margin-top:5%;width:55%;">
             <audio controls>
                 <source src="{{MEDIA_URL}}{{audiopath}}" type="audio/wav">
             </audio>
         </div>
-        {% csrf_token %}
-    </form>
-    <a href="{% url 'preview' %}" style="width:23%;margin:0px auto">
-        <button type="submit" class="submit" id="generate_t" style="cursor:not-allowed;background-color:grey;width:25%" name="generate_t" disabled>Generate Transcript</button>
-    </a>
+    </div>
+    <div style="width:100%;text-align:center;margin-top:80px">
+        <a href="{% url 'preview' %}" style="width:23%;padding:20px ">
+            <button type="submit" class="submit" id="generate_t" style="cursor:not-allowed;background-color:grey;width:25%;padding:20px" name="generate_t" disabled>Generate Transcript</button>
+        </a>
+    </div>
 </body>
 <script language="JavaScript" type="text/javascript">
     function hide(value){

@@ -20,21 +20,22 @@
         <form class="formaccount" method="post">
              <div class="inaccount">
                 <label class="labelaccount" for="user">Username</label>
-                <input value="{{user_name}}" class="inputaccount" type="text" id="user" name="address" disabled/>
+                <input value="{{user_name}}" class="inputaccount" type="text" id="user" name="username" disabled/>
             </div>
             <div class="inaccount">
                 <label class="labelaccount" for="fname">First Name</label>
-                <input value="" class="inputaccount" type="text" id="fname" name="firstname" required/>
+                <input value="{{user_obj.first_name}}" class="inputaccount" type="text" id="fname" name="firstname" required/>
             </div>
             <div class="inaccount">
                 <label class="labelaccount" for="sname">Surname</label>
-                <input value="" class="inputaccount" type="text" id="sname" name="surname" required/>
+                <input value="{{user_obj.second_name}}" class="inputaccount" type="text" id="sname" name="surname" required/>
             </div>
             <div class="inaccount">
                 <label class="labelaccount" for="cnum">Contact Number</label>
-                <input value="" class="inputaccount" type="text" id="cnum" name="contactnumber" maxLength="10" required/>
+                <input value="{{user_obj.contact}}" class="inputaccount" type="text" id="cnum" name="contactnumber" maxLength="10" required/>
             </div>
             <button class="btn">Submit</button>
+            {% csrf_token %}
         </form>
     </div>
 </body>
