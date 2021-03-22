@@ -30,7 +30,7 @@ global args
 args = parser.parse_args()
 
 
-SAVED_MODEL_NAME = 'pretrained/model'
+SAVED_MODEL_NAME = 'pretrained/model_1803_epoch_300.uisrnn_benchmark'
 
 def append2dict(speakerSlice, spk_period):
     key = list(spk_period.keys())[0]
@@ -191,5 +191,5 @@ def main(wav_path, embedding_per_second=1.0, overlap_rate=0.5):
     # p.plot.show()
 
 if __name__ == '__main__':
-    main(r'wavs/aa.wav', embedding_per_second=1.2, overlap_rate=0.4)
+    main(r'{{MEDIA_URL}}media/test.wav', embedding_per_second=1.2, overlap_rate=0.4)
 
