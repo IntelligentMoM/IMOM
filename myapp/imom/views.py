@@ -233,6 +233,7 @@ def preview(request, id=0, id1=1):
                 t = p.beginText(50,690)
                 t.setFont("Times-Roman", 15)
                 p.setTitle("SUMMARY")
+                print("Hello")
                 p.drawCentredString(300, 785, All_audio[i].audio_name)
                 wraped_text = "\n".join(wrap(Trans_Obj.summary, 80))
                 #print(wraped_text)
