@@ -280,7 +280,7 @@ def logout(request):
 
 def readtags(meetingid):
     p=Popen("imom/Transcript/speakerDiarization.py",shell=True,stdout=PIPE,stdin=PIPE) # create a child process
-    raw = p.communicate(bytes(input, 'UTF-8'))[0]  # gives raw bytes
+    raw = p.communicate()[0]  # gives raw bytes
     tags = raw.decode()
      # write to the file
      # change name to imom/a.txt for trail
