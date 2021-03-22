@@ -13,6 +13,7 @@ from spacy.lang.en import English
 from spacy.lang.en.stop_words import STOP_WORDS
 from string import punctuation
 from heapq import nlargest
+import subprocess
 
 
 # Create your views here.
@@ -276,3 +277,21 @@ def logout(request):
     if request.user.is_authenticated:
         auth.logout(request)
     return HttpResponseRedirect(reverse('sign'))
+
+def readtags(meetingid):
+    p=Popen("imom/Transcript/speakerDiarization.py",shell=True,stdout=PIPE,stdin=PIPE) # create a child process
+    raw = p.communicate(bytes(input, 'UTF-8'))[0]  # gives raw bytes
+    tags = raw.decode()
+     # write to the file
+     # change name to imom/a.txt for trail
+    with open("tags/{}".format(meetingid), 'w', encoding='utf-8') as f:
+        f.write(tags)
+        
+     # read tags from file
+     print_tags 
+     with open("tags/{}".format(meetingid), 'w', encoding='utf-8') as f:
+       print_tags= f.read()
+     
+    
+    
+
