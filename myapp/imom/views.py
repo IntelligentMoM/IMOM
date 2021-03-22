@@ -286,11 +286,11 @@ def readtags(meetingid):
      # change name to imom/a.txt for trail
     with open("tags/{}".format(meetingid), 'w', encoding='utf-8') as f:
         f.write(tags)
-        
+
      # read tags from file
-     print_tags 
-     with open("tags/{}".format(meetingid), 'w', encoding='utf-8') as f:
-       print_tags= f.read()
+    print_tags
+    with open("tags/{}".format(meetingid), 'w', encoding='utf-8') as f:
+        print_tags= f.read()
      
     
     
