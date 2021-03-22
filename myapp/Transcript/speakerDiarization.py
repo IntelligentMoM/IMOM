@@ -6,8 +6,8 @@ import numpy as np
 import uisrnn
 import librosa
 import sys
-sys.path.append('ghostvlad')
-sys.path.append('visualization')
+sys.path.append('Transcript/ghostvlad')
+sys.path.append('Transcript/visualization')
 import toolkits
 import model as spkModel
 import os
@@ -16,7 +16,7 @@ import os
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--gpu', default='0', type=str)
-parser.add_argument('--resume', default=r'ghostvlad/pretrained/weights.h5', type=str)
+parser.add_argument('--resume', default=r'Transcript/ghostvlad/pretrained/weights.h5', type=str)
 parser.add_argument('--data_path', default='datasetAuda', type=str)
 parser.add_argument('--net', default='resnet34s', choices=['resnet34s', 'resnet34l'], type=str)
 parser.add_argument('--ghost_cluster', default=2, type=int)
@@ -26,11 +26,13 @@ parser.add_argument('--aggregation_mode', default='gvlad', choices=['avg', 'vlad
 parser.add_argument('--loss', default='softmax', choices=['softmax', 'amsoftmax'], type=str)
 parser.add_argument('--test_type', default='normal', choices=['normal', 'hard', 'extend'], type=str)
 
+
+
 global args
 args = parser.parse_args()
 
 
-SAVED_MODEL_NAME = 'pretrained/model_1803_epoch_300.uisrnn_benchmark'
+SAVED_MODEL_NAME = 'Transcript/pretrained/model_1803_epoch_300.uisrnn_benchmark'
 
 def append2dict(speakerSlice, spk_period):
     key = list(spk_period.keys())[0]
@@ -191,5 +193,5 @@ def main(wav_path, embedding_per_second=1.0, overlap_rate=0.5):
     # p.plot.show()
 
 if __name__ == '__main__':
-    main(r'{{MEDIA_URL}}media/test.wav', embedding_per_second=1.2, overlap_rate=0.4)
+    main(r'Transcript/test10.wav', embedding_per_second=1.2, overlap_rate=0.4)
 
