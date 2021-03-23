@@ -72,7 +72,7 @@ def upload_audio(request):
                 audio_existed_or_not = None
                 global global_audiopath
                 global_audiopath = audiopath
-                print(audio_existed_or_not)
+                #print(audio_existed_or_not)
             if audio_existed_or_not is not None:
                 localvar = 2
                 return render(request, "imom/upload_audio.html", context={'localvar': localvar, 'audiopath': None})
@@ -198,7 +198,7 @@ def preview(request, id=0, id1=1):
                 if trans_Obj is None:
                     print("here")
                     Trans_Obj = transcript_summary(user=request.user, audio=All_audio[i].audio)
-                    Trans_Obj.transcript = "Hello, people from the future! Welcome to Normalized Nerd! I love to create educational videos on Machine Learning and Creative Coding. Machine learning and Data Science have changed our world dramatically and will continue to do so. But how they exactly work?...Find out with me. If you like my videos please subscribe to my channel."
+                    Trans_Obj.transcript = "The world needs opportunities for new leaders and new ideas. Along with all the other references that I had, I wouldn't have hesitated for a second. I would always examine the patient. Well, we like to play with stuff. To make a good living, this enormous heat sink heats up Greenland from the North. We're going to be the next generation. Buildings are becoming bundles of services. And that's what happened at the end of that three month. Which is right next to the sun?"
                     Trans_Obj.save()
                     return render(request, "imom/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript,'text_summary': ""})
                 return HttpResponseRedirect(reverse("upload_audio"))
