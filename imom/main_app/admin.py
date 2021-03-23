@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from imom.models import Userinfo, Audiofiles, transcript_summary, User_All_Details
+from main_app.models import Userinfo, Audiofiles, transcript_summary, User_All_Details
 
 admin.site.register(Userinfo)
 admin.site.register(Audiofiles)
