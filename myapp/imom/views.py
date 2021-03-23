@@ -8,11 +8,12 @@ import io
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from textwrap import wrap
-import spacy
-from spacy.lang.en import English
-from spacy.lang.en.stop_words import STOP_WORDS
-from string import punctuation
-from heapq import nlargest
+#import spacy
+#from spacy.lang.en import English
+#from spacy.lang.en.stop_words import STOP_WORDS
+#from string import punctuation
+#from heapq import nlargest
+import subprocess
 
 
 # Create your views here.
@@ -273,6 +274,26 @@ def myaccount(request):
         return HttpResponseRedirect(reverse('upload_audio'))
 
 def logout(request):
+    readtags("0")
     if request.user.is_authenticated:
         auth.logout(request)
     return HttpResponseRedirect(reverse('sign'))
+
+def readtags(meetingid):
+    
+    p=subprocess.Popen("python3 Transcript/speakerDiarization.py",shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE) # create a child process
+    raw = p.communicate()[0]  # gives raw bytes
+    tags = raw.decode()
+     # write to the file
+     # change name to imom/a.txt for trail
+    with open("imom/a.txt", 'w', encoding='utf-8') as f:
+        f.write(tags)
+
+     # read tags from file
+    print_tags = ""
+    with open("imom/a.txt", 'r', encoding='utf-8') as f:
+        print_tags= f.read()
+    print(print_tags) 
+    
+    
+
