@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class ImomConfig(AppConfig):
-    name = 'imom'
+    name = 'main_app'

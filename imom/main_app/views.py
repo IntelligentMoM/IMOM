@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from imom.models import User, Userinfo, Audiofiles, transcript_summary, User_All_Details
+from main_app.models import User, Userinfo, Audiofiles, transcript_summary, User_All_Details
 from django.contrib.auth.models import auth
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse
@@ -43,7 +43,7 @@ def sign(request):
                 return HttpResponseRedirect(reverse('myaccount'))
             else:
                 alertvar = 1
-                return render(request, "imom/Sign-in.html", context={'alertvar': alertvar})
+                return render(request, "main_app/Sign-in.html", context={'alertvar': alertvar})
 
         # FOR LOGIN IN
         if 'signin' in request.POST:
@@ -53,12 +53,12 @@ def sign(request):
                 return HttpResponseRedirect(reverse('upload_audio'))
             else:
                 alertvar = 2
-                return render(request, "imom/Sign-in.html", context={'alertvar': alertvar})
+                return render(request, "main_app/Sign-in.html", context={'alertvar': alertvar})
 
     else:
         global global_audiopath
         global_audiopath=""
-        return render(request, "imom/Sign-in.html")
+        return render(request, "main_app/Sign-in.html")
 
 def upload_audio(request):
     if request.method == 'POST':
@@ -76,7 +76,7 @@ def upload_audio(request):
                 #print(audio_existed_or_not)
             if audio_existed_or_not is not None:
                 localvar = 2
-                return render(request, "imom/upload_audio.html", context={'localvar': localvar, 'audiopath': None})
+                return render(request, "main_app/upload_audio.html", context={'localvar': localvar, 'audiopath': None})
             else:
                 audio_obj = Audiofiles(user=request.user)
                 audio_obj.audio_name = audiofile.name
@@ -85,10 +85,10 @@ def upload_audio(request):
                 localvar = 1
                 latest_audio = Audiofiles.objects.last()
                 print(latest_audio.audio)
-                return render(request, "imom/upload_audio.html", context={'localvar': localvar, 'audiopath': latest_audio.audio})
+                return render(request, "main_app/upload_audio.html", context={'localvar': localvar, 'audiopath': latest_audio.audio})
         if 'generate_t' in request.POST:
             localvar = 3
-            return render(request, "imom/upload_audio.html", context={'localvar': localvar, 'audiopath': global_audiopath})
+            return render(request, "main_app/upload_audio.html", context={'localvar': localvar, 'audiopath': global_audiopath})
         # if 'summarybtn' in request.POST:
         #     if global_audiopath:
         #         text1 = "Hello, people from the future! Welcome to Normalized Nerd! I love to create educational videos on Machine Learning and Creative Coding. Machine learning and Data Science have changed our world dramatically and will continue to do so. But how they exactly work?...Find out with me. If you like my videos please subscribe to my channel."
@@ -97,11 +97,11 @@ def upload_audio(request):
         #         trans_summ_obj.summary = summarize(text1, ratio=0.5)
         #         trans_summ_obj.save()
         #     localvar = 3
-        #     return render(request, "imom/upload_audio.html", context={'localvar': localvar, 'audiopath': global_audiopath})
+        #     return render(request, "main_app/upload_audio.html", context={'localvar': localvar, 'audiopath': global_audiopath})
     else:
         if request.user.is_authenticated:
             localvar = 0
-            return render(request, "imom/upload_audio.html", context={'localvar': localvar})
+            return render(request, "main_app/upload_audio.html", context={'localvar': localvar})
         else:
             return HttpResponseRedirect(reverse("sign"))
 
@@ -116,7 +116,7 @@ class Forhistory:
 
 def history(request):
     if request.method == "POST":
-            return render(request, "imom/history.html")
+            return render(request, "main_app/history.html")
     else:
         if request.user.is_authenticated:
             global global_audiopath
@@ -139,7 +139,7 @@ def history(request):
                 # print(n)
                 OBJ = Forhistory(i.audio_name, n)
                 Finallist.append(OBJ)
-            return render(request, "imom/history.html", context={'Audiofiles_obj': Finallist})
+            return render(request, "main_app/history.html", context={'Audiofiles_obj': Finallist})
         else:
             return HttpResponseRedirect(reverse("sign"))
 
@@ -201,7 +201,7 @@ def preview(request, id=0, id1=1):
                     Trans_Obj = transcript_summary(user=request.user, audio=All_audio[i].audio)
                     Trans_Obj.transcript = "The world needs opportunities for new leaders and new ideas. Along with all the other references that I had, I wouldn't have hesitated for a second. I would always examine the patient. Well, we like to play with stuff. To make a good living, this enormous heat sink heats up Greenland from the North. We're going to be the next generation. Buildings are becoming bundles of services. And that's what happened at the end of that three month. Which is right next to the sun?"
                     Trans_Obj.save()
-                    return render(request, "imom/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript,'text_summary': ""})
+                    return render(request, "main_app/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript,'text_summary': ""})
                 return HttpResponseRedirect(reverse("upload_audio"))
             elif int(id1) == 2:
                 Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
@@ -226,7 +226,7 @@ def preview(request, id=0, id1=1):
                 Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
                 Trans_Obj.summary = summarize(Trans_Obj.transcript, ratio=0.5)
                 Trans_Obj.save()
-                return render(request, "imom/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript, 'text_summary': Trans_Obj.summary})
+                return render(request, "main_app/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript, 'text_summary': Trans_Obj.summary})
             elif int(id1) == 4:
                 Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
                 buffer = io.BytesIO()
@@ -257,7 +257,7 @@ def myaccount(request):
                 user_obj = User_All_Details.objects.get(user=request.user)
             except User_All_Details.DoesNotExist:
                 user_obj = None
-            return render(request, "imom/myaccount.html", context={'user_name':request.user.username, 'user_obj':user_obj})
+            return render(request, "main_app/myaccount.html", context={'user_name':request.user.username, 'user_obj':user_obj})
         else:
             return HttpResponseRedirect(reverse("sign"))
     elif request.method == "POST":
@@ -285,13 +285,13 @@ def readtags(meetingid):
     raw = p.communicate()[0]  # gives raw bytes
     tags = raw.decode()
      # write to the file
-     # change name to imom/a.txt for trail
-    with open("imom/a.txt", 'w', encoding='utf-8') as f:
+     # change name to main_app/a.txt for trail
+    with open("main_app/a.txt", 'w', encoding='utf-8') as f:
         f.write(tags)
 
      # read tags from file
     print_tags = ""
-    with open("imom/a.txt", 'r', encoding='utf-8') as f:
+    with open("main_app/a.txt", 'r', encoding='utf-8') as f:
         print_tags= f.read()
     print(print_tags) 
     
