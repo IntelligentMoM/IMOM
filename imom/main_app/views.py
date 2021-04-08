@@ -8,13 +8,22 @@ import io
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from textwrap import wrap
-#import spacy
-#from spacy.lang.en import English
-#from spacy.lang.en.stop_words import STOP_WORDS
-#from string import punctuation
-#from heapq import nlargest
+
 import subprocess
 
+from pydub import AudioSegment
+import speech_recognition as sr
+import os
+
+import azure.cognitiveservices.speech as speechsdk
+import time
+import torch
+import imom.urls as urls
+
+
+
+import json
+from transformers import T5Tokenizer, T5ForConditionalGeneration, T5Config
 
 # Create your views here.
 
@@ -180,6 +189,92 @@ def history(request):
 #     summary = ''.join(final_summary)
 #     return summary
 
+
+def getms(x):
+    time = x.split(":")
+    if len(time) == 2:
+      min = int(time[0])
+      t = time[1].split('.') 
+      milli = int(t[0])*1000+ int(t[1])
+      return min*60*1000 + milli
+
+
+# model = T5ForConditionalGeneration.from_pretrained('t5-small')
+# tokenizer = T5Tokenizer.from_pretrained('t5-small')
+
+def abstractiveSummary(text):
+
+
+    device = torch.device('cpu')
+
+    preprocess_text = text.strip().replace("\n", "")
+    t5_prepared_Text = "summarize: " + preprocess_text
+
+    tokenized_text = urls.tokenizer.encode(t5_prepared_Text, return_tensors="pt").to(device)
+
+    summary_ids = urls.model.generate(tokenized_text,
+                                 num_beams=4,
+                                 no_repeat_ngram_size=2,
+                                 min_length=200,
+                                 max_length=300,
+                                 early_stopping=True)
+
+    output = urls.tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+    return output
+
+# def summary_api(text):
+#     r = requests.post(
+#         "https://api.deepai.org/api/summarization",
+#         data={
+#             'text': text,
+#         },
+#         headers={'api-key': 'quickstart-QUdJIGlzIGNvbWluZy4uLi4K'}
+#     )
+#     print(r.json())
+
+def speech_recognize_continuous_from_file(path):
+
+    """performs continuous speech recognition with input from an audio file"""
+    speech_config = speechsdk.SpeechConfig(subscription="b86fbf9725154eaf89aee300b45c400c", region="eastus")
+    audio_config = speechsdk.audio.AudioConfig(filename=path)
+
+    speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+
+    done = False
+
+    def stop_cb(evt):
+        """callback that stops continuous recognition upon receiving an event `evt`"""
+        print('CLOSING on {}'.format(evt))
+        speech_recognizer.stop_continuous_recognition()
+        nonlocal done
+        done = True
+
+    all_results = []
+
+    def handle_final_result(evt):
+        all_results.append(evt.result.text)
+
+    speech_recognizer.recognized.connect(handle_final_result)
+
+    # Connect callbacks to the events fired by the speech recognizer
+    speech_recognizer.recognizing.connect(lambda evt: print('RECOGNIZING: {}'.format(evt)))
+    speech_recognizer.recognized.connect(lambda evt: print('RECOGNIZED: {}'.format(evt)))
+    speech_recognizer.session_started.connect(lambda evt: print('SESSION STARTED: {}'.format(evt)))
+    speech_recognizer.session_stopped.connect(lambda evt: print('SESSION STOPPED {}'.format(evt)))
+    speech_recognizer.canceled.connect(lambda evt: print('CANCELED {}'.format(evt)))
+
+    # stop continuous recognition on either session stopped or canceled events
+    speech_recognizer.session_stopped.connect(stop_cb)
+    speech_recognizer.canceled.connect(stop_cb)
+
+    # Start continuous speech recognition
+    speech_recognizer.start_continuous_recognition()
+    while not done:
+        time.sleep(.5)
+
+    print("Printing all results:")
+    return all_results[0]
+
 def preview(request, id=0, id1=1):
     if request.method == "GET":
         if request.user.is_authenticated:
@@ -197,10 +292,55 @@ def preview(request, id=0, id1=1):
                 except transcript_summary.DoesNotExist:
                     trans_Obj = None
                 if trans_Obj is None:
+
                     print("here")
+                    readtags(All_audio[i].audio)
+                    audio = AudioSegment.from_wav(All_audio[i].audio)
+                    print_tags = ""
+                    with open("main_app/a.txt", 'r', encoding='utf-8') as f:
+                        print_tags= f.read()
+
+                    print("Printing timestamps...")
+                    print(print_tags)
+
+                    tags = print_tags.split("\n")
+                    temp = dict()
+                    curr = None
+
+                    for tag in tags:
+                        if len(tag)==1:
+                            curr = int(tag)
+                            temp[curr] = []
+                        else:
+                            if tag!="" :
+                                tmstmp = tag.split("-")
+                                start = getms(tmstmp[0])
+                                end = getms(tmstmp[1])
+                                temp[curr].append((start,end))
+
+                    for speaker, tlist in temp.items():
+                        x = audio[0:0]
+                        for s in tlist:
+                            clip = audio[s[0]:s[1]]
+                            x = x + clip
+                            x.export( "main_app/audio/" + str(speaker) + ".wav", format="wav")
+
+                    path = "main_app/audio/"
+                    generatedTranscript = ""
+                    print("Generating transcipt...")
+
+                    for j in sorted(os.listdir(path)):
+                       generatedTranscript += speech_recognize_continuous_from_file(path+j) + " \n"
+
+                    print("Done...")
+                    print("Deleting unnecessary files...")
+                    for j in sorted(os.listdir(path)):
+                    	os.remove( path + j)
+
                     Trans_Obj = transcript_summary(user=request.user, audio=All_audio[i].audio)
-                    Trans_Obj.transcript = "Hello, people from the future! Welcome to Normalized Nerd! I love to create educational videos on Machine Learning and Creative Coding. Machine learning and Data Science have changed our world dramatically and will continue to do so. But how they exactly work?...Find out with me. If you like my videos please subscribe to my channel."
+                    Trans_Obj.transcript = generatedTranscript
                     Trans_Obj.save()
+
                     return render(request, "main_app/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript,'text_summary': ""})
                 return HttpResponseRedirect(reverse("upload_audio"))
             elif int(id1) == 2:
@@ -218,15 +358,23 @@ def preview(request, id=0, id1=1):
                 p.drawText(t)
                 p.showPage()
                 p.save()
+                
                 # FileResponse sets the Content-Disposition header so that browsers
                 # present the option to save the file.
+                
                 buffer.seek(0)
                 return FileResponse(buffer, as_attachment=True, filename='Transcript.pdf')
+                
             elif int(id1) == 3:
+            
                 Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
-                Trans_Obj.summary = summarize(Trans_Obj.transcript, ratio=0.5)
+                Trans_Obj.summary = abstractiveSummary(Trans_Obj.transcript)
+                # summary_api(Trans_Obj.transcript)
+                # Trans_Obj.summary = summarize(Trans_Obj.transcript, ratio=0.5)
+
                 Trans_Obj.save()
                 return render(request, "main_app/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript, 'text_summary': Trans_Obj.summary})
+                
             elif int(id1) == 4:
                 Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
                 buffer = io.BytesIO()
@@ -274,26 +422,18 @@ def myaccount(request):
         return HttpResponseRedirect(reverse('upload_audio'))
 
 def logout(request):
-    readtags("0")
+
     if request.user.is_authenticated:
         auth.logout(request)
     return HttpResponseRedirect(reverse('sign'))
 
-def readtags(meetingid):
-    
-    p=subprocess.Popen("python3 Transcript/speakerDiarization.py",shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE) # create a child process
+def readtags(path):
+
+    # create a child process
+    p = subprocess.Popen( "python3 Transcript/speakerDiarization.py --path " + path.name ,shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE) 
     raw = p.communicate()[0]  # gives raw bytes
     tags = raw.decode()
-     # write to the file
-     # change name to main_app/a.txt for trail
+
     with open("main_app/a.txt", 'w', encoding='utf-8') as f:
         f.write(tags)
-
-     # read tags from file
-    print_tags = ""
-    with open("main_app/a.txt", 'r', encoding='utf-8') as f:
-        print_tags= f.read()
-    print(print_tags) 
-    
-    
 
