@@ -193,5 +193,5 @@ def main(wav_path, embedding_per_second=1.0, overlap_rate=0.5):
     # p.plot.show()
 
 if __name__ == '__main__':
-    main(r'Transcript/test10.wav', embedding_per_second=1.2, overlap_rate=0.4)
+    main(r'MEDIA_URLmedia/test10.wav', embedding_per_second=1.2, overlap_rate=0.4)
 

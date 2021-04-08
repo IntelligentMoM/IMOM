@@ -8,6 +8,8 @@ import io
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from textwrap import wrap
+from transformers import pipeline
+summarizer = pipeline("summarization")
 #import spacy
 #from spacy.lang.en import English
 #from spacy.lang.en.stop_words import STOP_WORDS
@@ -224,7 +226,8 @@ def preview(request, id=0, id1=1):
                 return FileResponse(buffer, as_attachment=True, filename='Transcript.pdf')
             elif int(id1) == 3:
                 Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
-                Trans_Obj.summary = summarize(Trans_Obj.transcript, ratio=0.5)
+                # Trans_Obj.summary = summarize(Trans_Obj.transcript, ratio=0.5)
+                Trans_Obj.summary = summarizer(Trans_Obj.transcript, min_length=5, model='bart-large-cnn')
                 Trans_Obj.save()
                 return render(request, "main_app/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript, 'text_summary': Trans_Obj.summary})
             elif int(id1) == 4:
@@ -281,7 +284,7 @@ def logout(request):
 
 def readtags(meetingid):
     
-    p=subprocess.Popen("python3 Transcript/speakerDiarization.py",shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE) # create a child process
+    p = subprocess.Popen("python3 Transcript/speakerDiarization.py",shell=True,stdout=subprocess.PIPE,stdin=subprocess.PIPE) # create a child process
     raw = p.communicate()[0]  # gives raw bytes
     tags = raw.decode()
      # write to the file
