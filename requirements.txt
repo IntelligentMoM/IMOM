@@ -2,7 +2,7 @@ asgiref==3.3.1
 Django==3.1.6
 fpdf==1.7.2
 gensim==3.8.3
-numpy==1.20.1
+numpy>=1.15.1
 Pillow==8.1.2
 pytz==2021.1
 reportlab==3.5.65
@@ -14,3 +14,7 @@ torch>=0.4.0
 tensorflow
 keras
 librosa
+SpeechRecognition
+pydub
+transformers==2.8.0
+azure-cognitiveservices-speech
