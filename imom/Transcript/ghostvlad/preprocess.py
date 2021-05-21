@@ -15,6 +15,7 @@ import pdb
 import argparse
 parser = argparse.ArgumentParser()
 # set up training configuration.
+parser.add_argument('--path', default='', type=str)
 parser.add_argument('--gpu', default='', type=str)
 parser.add_argument('--resume', default=r'pretrained/weights.h5', type=str)
 parser.add_argument('--data_path', default='4persons', type=str)

@@ -8,13 +8,16 @@ import librosa
 import sys
 sys.path.append('Transcript/ghostvlad')
 sys.path.append('Transcript/visualization')
-import toolkits
+
 import model as spkModel
-import os
+import toolkits
+from pathlib import Path
+
 # from viewer import PlotDiar
 
 import argparse
 parser = argparse.ArgumentParser()
+parser.add_argument('--path', default='', type=str)
 parser.add_argument('--gpu', default='0', type=str)
 parser.add_argument('--resume', default=r'Transcript/ghostvlad/pretrained/weights.h5', type=str)
 parser.add_argument('--data_path', default='datasetAuda', type=str)
@@ -142,6 +145,8 @@ def main(wav_path, embedding_per_second=1.0, overlap_rate=0.5):
 
 
     model_args, _, inference_args = uisrnn.parse_arguments()
+
+
     model_args.observation_dim = 512
     uisrnnModel = uisrnn.UISRNN(model_args)
     uisrnnModel.load(SAVED_MODEL_NAME)
@@ -180,18 +185,20 @@ def main(wav_path, embedding_per_second=1.0, overlap_rate=0.5):
             speakerSlice[spk][tid]['stop'] = e
 
     for spk,timeDicts in speakerSlice.items():
-        print('========= ' + str(spk) + ' =========')
+        print(str(spk))
         for timeDict in timeDicts:
             s = timeDict['start']
             e = timeDict['stop']
             s = fmtTime(s) 
             e = fmtTime(e)
-            print(s+' ==> '+e)
+            print(s+'-'+e)
 
     # p = PlotDiar(map=speakerSlice, wav=wav_path, gui=True, size=(25, 6))
     # p.draw()
     # p.plot.show()
 
 if __name__ == '__main__':
-    main(r'MEDIA_URLmedia/test10.wav', embedding_per_second=1.2, overlap_rate=0.4)
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
+    main( MEDIA_ROOT + "/" + sys.argv[2], embedding_per_second=1.2, overlap_rate=0.4)
 
