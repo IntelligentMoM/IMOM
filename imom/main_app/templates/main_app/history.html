@@ -21,7 +21,7 @@
                 {% for obj in Audiofiles_obj %}
                     {% if  not forloop.counter|divisibleby:2 %}
                         <tr>
-                            <td style="width: 25%;"><p style="font-size:115%">{{obj.audio_name}}</p></td>
+                            <td style="width: 25%;"><p style="font-size:115%">{{obj.meeting_name}}</p></td>
                             <td style="width: 30%;"><audio controls>
                                      <source src="{{MEDIA_URL}}media/{{obj.audio_name}}" type="audio/wav">
                                  </audio>
@@ -55,7 +55,7 @@
                         </tr>
                     {% else %}
                         <tr>
-                            <td style="width: 25%;background-color:#eee"><p style="font-size:115%">{{obj.audio_name}}</p></td>
+                            <td style="width: 25%;background-color:#eee"><p style="font-size:115%">{{obj.meeting_name}}</p></td>
                             <td style="width: 30%;"><audio controls>
                                      <source src="{{MEDIA_URL}}media/{{obj.audio_name}}" type="audio/wav">
                                  </audio>

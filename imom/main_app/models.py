@@ -16,6 +16,7 @@ class User_All_Details(models.Model):
 class Audiofiles(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     audio_name = models.CharField(max_length=500)
+    meeting_name = models.CharField(max_length=500)
     audio = models.FileField(upload_to='media/')
 
 class transcript_summary(models.Model):

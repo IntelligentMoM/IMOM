@@ -73,6 +73,8 @@ def upload_audio(request):
     if request.method == 'POST':
         if 'uploadbtn' in request.POST:
             audiofile = request.FILES['audiofile']
+            user_given_meeting_name = request.POST.get('namefile')
+            print(user_given_meeting_name)
             # print(request.user,audiofile)
             audiopath = "media/" + audiofile.name
             print("audiopath", audiopath)
@@ -89,6 +91,7 @@ def upload_audio(request):
             else:
                 audio_obj = Audiofiles(user=request.user)
                 audio_obj.audio_name = audiofile.name
+                audio_obj.meeting_name = user_given_meeting_name
                 audio_obj.audio = audiofile
                 audio_obj.save()
                 localvar = 1
@@ -116,9 +119,11 @@ def upload_audio(request):
 
 
 class Forhistory:
+    meeting_name = ""
     audio_name = ""
     number = 0
-    def __init__(self, a,n):
+    def __init__(self, m,a,n):
+        self.meeting_name = m
         self.audio_name = a
         self.number = n
 
@@ -135,7 +140,7 @@ def history(request):
             n = 0
             for i in Audiofiles_obj:
                 try:
-                    trans_summ_existed_or_not = transcript_summary.objects.get(user=request.user, audio=i.audio)
+                    trans_summ_existed_or_not = transcript_summary.objects.get(user=request.user, audio=i.meeting_name)
                 except transcript_summary.DoesNotExist:
                     trans_summ_existed_or_not = None
                 if trans_summ_existed_or_not is None:
@@ -146,7 +151,7 @@ def history(request):
                     elif trans_summ_existed_or_not.summary:
                         n = 3
                 # print(n)
-                OBJ = Forhistory(i.audio_name, n)
+                OBJ = Forhistory(i.meeting_name,i.audio_name, n)
                 Finallist.append(OBJ)
             return render(request, "main_app/history.html", context={'Audiofiles_obj': Finallist})
         else:
@@ -235,7 +240,7 @@ def abstractiveSummary(text):
 def speech_recognize_continuous_from_file(path):
 
     """performs continuous speech recognition with input from an audio file"""
-    speech_config = speechsdk.SpeechConfig(subscription="b86fbf9725154eaf89aee300b45c400c", region="eastus")
+    speech_config = speechsdk.SpeechConfig(subscription="88cf6454500f41829225832b961aca99", region="eastus")
     audio_config = speechsdk.audio.AudioConfig(filename=path)
 
     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
@@ -288,7 +293,7 @@ def preview(request, id=0, id1=1):
                 i = int(id)-1
             if int(id1) == 1:
                 try:
-                    trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
+                    trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].meeting_name)
                 except transcript_summary.DoesNotExist:
                     trans_Obj = None
                 if trans_Obj is None:
@@ -333,18 +338,18 @@ def preview(request, id=0, id1=1):
                        generatedTranscript += speech_recognize_continuous_from_file(path+j) + " \n"
 
                     print("Done...")
-                    print("Deleting unnecessary files...")
-                    for j in sorted(os.listdir(path)):
-                        os.remove( path + j)
+                    # print("Deleting unnecessary files...")
+                    # for j in sorted(os.listdir(path)):
+                    #     os.remove( path + j)
 
-                    Trans_Obj = transcript_summary(user=request.user, audio=All_audio[i].audio)
+                    Trans_Obj = transcript_summary(user=request.user, audio=All_audio[i].meeting_name)
                     Trans_Obj.transcript = generatedTranscript
                     Trans_Obj.save()
 
-                    return render(request, "main_app/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript,'text_summary': ""})
+                    return render(request, "main_app/preview.html", context={"identifier": id, 'audio_name': All_audio[i].meeting_name, 'text_transcript': Trans_Obj.transcript,'text_summary': ""})
                 return HttpResponseRedirect(reverse("upload_audio"))
             elif int(id1) == 2:
-                Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
+                Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].meeting_name)
                 buffer = io.BytesIO()
                 # Create the PDF object, using the buffer as its "file."
                 p = canvas.Canvas(buffer)
@@ -367,7 +372,7 @@ def preview(request, id=0, id1=1):
                 
             elif int(id1) == 3:
             
-                Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
+                Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].meeting_name)
                 Trans_Obj.summary = abstractiveSummary(Trans_Obj.transcript)
                 # summary_api(Trans_Obj.transcript)
                 # Trans_Obj.summary = summarize(Trans_Obj.transcript, ratio=0.5)
@@ -376,7 +381,7 @@ def preview(request, id=0, id1=1):
                 return render(request, "main_app/preview.html", context={"identifier": id, 'audio_name': All_audio[i].audio_name, 'text_transcript': Trans_Obj.transcript, 'text_summary': Trans_Obj.summary})
                 
             elif int(id1) == 4:
-                Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].audio)
+                Trans_Obj = transcript_summary.objects.get(user=request.user, audio=All_audio[i].meeting_name)
                 buffer = io.BytesIO()
                 p = canvas.Canvas(buffer)
                 t = p.beginText(50,690)
