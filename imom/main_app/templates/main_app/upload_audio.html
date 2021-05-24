@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{% static "css/nav.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/upload_audio.css" %}">
+
+
     <title>Intelligent Minutes of Meeting</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 </head>
@@ -23,7 +25,8 @@
             An AI-enabled tool to tag multiple speakers from a pre-recorded meeting audio and generate the transcript along with the MoM summary
         </div>
 
-        <div style="font-size : 20px; padding : 10px" >
+        <div style="font-size : 20px; padding : 40px;border :0px solid red; display: flex; justify-content: center" >
+        <div style="border :0px solid green"">
             <form method="post" enctype="multipart/form-data" class="form" onsubmit="hide({{localvar}})">
                 <input class="input" type="file" name="audiofile" id="audiofile" accept=".wav" required>
                 <input class="input" type="text" name="namefile" id="namefile" required>
@@ -33,13 +36,14 @@
                     <div id="valid" style="color:green">
                         Uploaded
                     </div>
-                    <div id="warning" style="color:yellow">
+                    <div id="warning" style="color:red">
                         Audio file is already uploaded, You can proceed to History Tab
                     </div>
                 </div>
                 {% csrf_token %}
             </form>
-                <div style="width:25%;">
+            </div>
+                <div style="width:25%; padding : 40px; border :0px solid yellow"">
                     <audio controls>
                         <source src="{{MEDIA_URL}}{{audiopath}}" type="audio/wav">
                     </audio>
