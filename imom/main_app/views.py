@@ -215,8 +215,8 @@ def abstractiveSummary(text):
     summary_ids = urls.model.generate(tokenized_text,
                                  num_beams=4,
                                  no_repeat_ngram_size=2,
-                                 min_length=200,
-                                 max_length=300,
+                                 min_length=10,
+                                 max_length=1000,
                                  early_stopping=True)
 
     output = urls.tokenizer.decode(summary_ids[0], skip_special_tokens=True)
@@ -235,7 +235,7 @@ def abstractiveSummary(text):
 def speech_recognize_continuous_from_file(path):
 
     """performs continuous speech recognition with input from an audio file"""
-    speech_config = speechsdk.SpeechConfig(subscription="b86fbf9725154eaf89aee300b45c400c", region="eastus")
+    speech_config = speechsdk.SpeechConfig(subscription="88cf6454500f41829225832b961aca99", region="eastus")
     audio_config = speechsdk.audio.AudioConfig(filename=path)
 
     speech_recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
@@ -252,7 +252,7 @@ def speech_recognize_continuous_from_file(path):
     all_results = []
 
     def handle_final_result(evt):
-        all_results.append(evt.result.text)
+    	all_results.append(evt.result.text)
 
     speech_recognizer.recognized.connect(handle_final_result)
 
@@ -270,10 +270,14 @@ def speech_recognize_continuous_from_file(path):
     # Start continuous speech recognition
     speech_recognizer.start_continuous_recognition()
     while not done:
-        time.sleep(.5)
+       time.sleep(.5)
 
     print("Printing all results:")
-    return all_results[0]
+    print(all_results)
+    output = ""
+    for result in all_results:
+    	output += result
+    return output
 
 def preview(request, id=0, id1=1):
     if request.method == "GET":
@@ -330,7 +334,7 @@ def preview(request, id=0, id1=1):
                     print("Generating transcipt...")
 
                     for j in sorted(os.listdir(path)):
-                       generatedTranscript += speech_recognize_continuous_from_file(path+j) + " \n"
+                       generatedTranscript += speech_recognize_continuous_from_file(path+j) + "\n"
 
                     print("Done...")
                     print("Deleting unnecessary files...")
