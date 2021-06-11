@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "css/signin.css" %}">
     <title>IMOM</title>
 </head>
-<body onload="showalert({{alertvar}})">
+<body>
    <header>
         <div class="first">
             <p style="margin-left:7%;color:white;font-size:310%;width:50%">
@@ -16,7 +16,7 @@
                 <p style="text-align:center;margin:35px 0px;font-size:170%" id="1stp">
                     SIGN IN
                 </p>
-                <form method="post">
+                <form method="post" onsubmit="showalert({{alertvar}})">
                     <input class="input" type="email" id="email" name="email" placeholder="E-mail" required>
                     <input class="input" type="password" id="password" name="password" placeholder="Password" required>
                     <input class="submit" type="submit" value="Submit" id="1stbtn" name="signin">
@@ -55,7 +55,7 @@
             alert("Already registered! Please Sign-in.")
         }
         else if(value==2){
-            alert("Invalid Credentials")
+            alert("The Username and Password is Incorrect")
         }
     }
 
