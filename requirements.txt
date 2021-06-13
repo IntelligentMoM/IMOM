@@ -12,7 +12,7 @@ smart-open==4.2.0
 sqlparse==0.4.1
 torch>=0.4.0
 tensorflow==2.4.1
-keras
+keras==2.4.3
 librosa
 SpeechRecognition
 pydub
